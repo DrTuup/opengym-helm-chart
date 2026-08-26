@@ -39,11 +39,6 @@ jobs:
           VERSION=$(git describe --tags --abbrev=0 --match "v*" 2>/dev/null | sed 's/^v//' || true)
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
-      - name: Lowercase repo name
-        id: repo
-        if: steps.semrel.outputs.version != ''
-        run: echo "name=$(echo '${{ github.repository }}' | tr '[:upper:]' '[:lower:]')" >> "$GITHUB_OUTPUT"
-
       - name: Set up Helm
         if: steps.semrel.outputs.version != ''
         uses: azure/setup-helm@v4
