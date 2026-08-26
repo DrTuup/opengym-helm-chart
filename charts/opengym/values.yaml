@@ -1,0 +1,186 @@
+# -- API workload configuration.
+api:
+  # -- Number of API replicas.
+  replicaCount: 1
+  image:
+    # -- API container image repository.
+    repository: registry.gitlab.com/duartesantos8/opengym/api
+    # -- Image pull policy.
+    pullPolicy: IfNotPresent
+    # -- Immutable image tag. Set either tag or digest.
+    tag: "1.2.11"
+    # -- Image digest, preferred over tag.
+    digest: ""
+  # -- API listening port.
+  port: 3000
+  service:
+    # -- API Service type.
+    type: ClusterIP
+    # -- API Service annotations.
+    annotations: {}
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      memory: 512Mi
+  # -- API readiness probe.
+  readinessProbe:
+    tcpSocket:
+      port: http
+    initialDelaySeconds: 3
+    periodSeconds: 5
+  # -- API liveness probe.
+  livenessProbe:
+    tcpSocket:
+      port: http
+    initialDelaySeconds: 10
+    periodSeconds: 15
+
+# -- Web workload configuration.
+web:
+  # -- Number of web replicas.
+  replicaCount: 1
+  image:
+    # -- Web container image repository.
+    repository: registry.gitlab.com/duartesantos8/opengym/web
+    # -- Image pull policy.
+    pullPolicy: IfNotPresent
+    # -- Immutable image tag. Set either tag or digest.
+    tag: "1.2.11"
+    # -- Image digest, preferred over tag.
+    digest: ""
+  # -- Nginx listening port inside the container.
+  containerPort: 80
+  service:
+    # -- Web Service type.
+    type: ClusterIP
+    # -- Web Service port.
+    port: 8080
+    # -- Web Service annotations.
+    annotations: {}
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      memory: 256Mi
+  # -- Web container security context. Nginx needs CHOWN during startup to
+  # -- prepare its cache directories.
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+      add:
+        - CHOWN
+        - SETGID
+        - SETUID
+  # -- Web readiness probe.
+  readinessProbe:
+    tcpSocket:
+      port: http
+    initialDelaySeconds: 3
+    periodSeconds: 5
+
+# -- Non-secret application configuration.
+config:
+  # -- Directory used by the API for persistent data.
+  dataDir: /data
+  # -- WebAuthn relying-party ID. Defaults to the ingress host.
+  rpId: ""
+  # -- Application origin. Defaults to the HTTPS ingress origin.
+  origin: ""
+
+# -- API persistent data volume configuration.
+data:
+  # -- PersistentVolumeClaim annotations.
+  annotations: {}
+  # -- Requested storage size.
+  storage: 1Gi
+  # -- PersistentVolumeClaim access modes.
+  accessModes:
+    - ReadWriteOnce
+  # -- Storage class, or empty to use the cluster default.
+  storageClassName: ""
+
+# -- Shared exercise media volume configuration.
+media:
+  # -- PersistentVolumeClaim annotations.
+  annotations: {}
+  # -- Requested storage size.
+  storage: 512Mi
+  # -- PersistentVolumeClaim access modes.
+  accessModes:
+    - ReadWriteOnce
+  # -- Storage class, or empty to use the cluster default.
+  storageClassName: ""
+  loader:
+    # -- Download exercise media into the volume before starting the web pod.
+    enabled: true
+    # -- Media loader image.
+    image: alpine/git
+    # -- Media loader image pull policy.
+    imagePullPolicy: IfNotPresent
+    # -- Exercise media repository.
+    repository: https://github.com/hasaneyldrm/exercises-dataset
+
+# -- Ingress configuration.
+ingress:
+  # -- Enable the web Ingress.
+  enabled: false
+  # -- Ingress class name.
+  className: ""
+  # -- Ingress annotations.
+  annotations: {}
+  # -- Public hostname.
+  host: ""
+  # -- URL path.
+  path: /
+  # -- URL path matching behavior.
+  pathType: Prefix
+  # -- Additional paths for the primary host.
+  extraPaths: []
+  # -- Additional Ingress rules.
+  extraRules: []
+  tls:
+    # -- Enable TLS.
+    enabled: false
+    # -- TLS Secret managed by cert-manager.
+    secretName: ""
+  # -- Additional TLS configurations.
+  extraTls: []
+
+# -- Image pull secrets for private registries.
+imagePullSecrets: []
+# -- Override the chart name.
+nameOverride: ""
+# -- Override the generated full name.
+fullnameOverride: ""
+# -- Additional pod annotations.
+podAnnotations: {}
+# -- Additional pod labels.
+podLabels: {}
+# -- Pod security context.
+podSecurityContext:
+  seccompProfile:
+    type: RuntimeDefault
+# -- Container security context.
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+# -- Optional startup probe settings for the API.
+apiStartupProbe: {}
+# -- Optional startup probe settings for the web container.
+webStartupProbe: {}
+# -- Deployment update strategy. Recreate avoids overlapping pods using
+# -- ReadWriteOnce persistent volumes during upgrades.
+deploymentStrategy: Recreate
+# -- Node selector.
+nodeSelector: {}
+# -- Tolerations.
+tolerations: []
+# -- Affinity rules.
+affinity: {}

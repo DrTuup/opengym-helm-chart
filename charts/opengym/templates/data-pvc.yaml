@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "opengym.fullname" . }}-data
+  labels:
+    {{- include "opengym.labels" . | nindent 4 }}
+  {{- with .Values.data.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  accessModes:
+    {{- toYaml .Values.data.accessModes | nindent 4 }}
+  resources:
+    requests:
+      storage: {{ .Values.data.storage }}
+  {{- with .Values.data.storageClassName }}
+  storageClassName: {{ . | quote }}
+  {{- end }}

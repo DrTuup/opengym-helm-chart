@@ -1,0 +1,98 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "opengym.fullname" . }}-web
+  labels:
+    {{- include "opengym.labels" . | nindent 4 }}
+    app.kubernetes.io/component: web
+spec:
+  replicas: {{ .Values.web.replicaCount }}
+  strategy:
+    type: {{ .Values.deploymentStrategy }}
+  selector:
+    matchLabels:
+      {{- include "opengym.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: web
+  template:
+    metadata:
+      labels:
+        {{- include "opengym.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: web
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      initContainers:
+        {{- if .Values.media.loader.enabled }}
+        - name: media-loader
+          image: {{ .Values.media.loader.image }}
+          imagePullPolicy: {{ .Values.media.loader.imagePullPolicy }}
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              set -e
+              if [ -z "$(ls -A /out/img 2>/dev/null)" ]; then
+                git clone --depth 1 {{ .Values.media.loader.repository | quote }} /tmp/ds
+                mkdir -p /out/img /out/gif
+                cp /tmp/ds/images/*.jpg /out/img/
+                cp /tmp/ds/videos/*.gif /out/gif/
+              fi
+          volumeMounts:
+            - name: media
+              mountPath: /out
+        {{- end }}
+      containers:
+        - name: web
+          image: {{ include "opengym.webImage" . | quote }}
+          imagePullPolicy: {{ .Values.web.image.pullPolicy }}
+          securityContext:
+            {{- toYaml .Values.web.securityContext | nindent 12 }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.web.containerPort }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "opengym.fullname" . }}-config
+          volumeMounts:
+            - name: media
+              subPath: img
+              mountPath: /usr/share/nginx/html/img
+              readOnly: true
+            - name: media
+              subPath: gif
+              mountPath: /usr/share/nginx/html/gif
+              readOnly: true
+          readinessProbe:
+            {{- toYaml .Values.web.readinessProbe | nindent 12 }}
+          {{- with .Values.webStartupProbe }}
+          startupProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.web.resources | nindent 12 }}
+      volumes:
+        - name: media
+          persistentVolumeClaim:
+            claimName: {{ include "opengym.fullname" . }}-media
