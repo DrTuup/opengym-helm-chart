@@ -91,6 +91,26 @@ config:
   rpId: ""
   # -- Application origin. Defaults to the HTTPS ingress origin.
   origin: ""
+  # -- Name shown in the passkey prompt.
+  rpName: openGym
+  # -- Sign-in lifetime in days.
+  sessionDays: 90
+  # -- Comma-separated user IDs granted administrator access.
+  adminUids: ""
+  # -- Require an invite code to create a profile.
+  inviteOnly: ""
+  # -- Allow guest mode. Set to "0" to disable it.
+  allowGuest: ""
+  # -- Enable the activity log. Set to "0" to disable it.
+  auditLog: ""
+  # -- Maximum number of activity log events. Set to 0 for no limit.
+  auditMax: 5000
+  # -- Number of days to retain activity log events. Set to 0 for no limit.
+  auditDays: 90
+  # -- Activity log IP address mode: off, net, or full.
+  auditIp: off
+  # -- Contact address for push notifications. Defaults to the application origin.
+  vapidSubject: ""
 
 # -- API persistent data volume configuration.
 data:

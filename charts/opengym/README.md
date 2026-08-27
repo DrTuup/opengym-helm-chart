@@ -1,6 +1,6 @@
 # opengym
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.2.9](https://img.shields.io/badge/AppVersion-1.2.9-informational?style=flat-square)
+![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.2.11](https://img.shields.io/badge/AppVersion-1.2.11-informational?style=flat-square)
 
 A Helm Chart for deploying openGym on Kubernetes
 
@@ -21,10 +21,20 @@ A Helm Chart for deploying openGym on Kubernetes
 | api.service.annotations | object | `{}` | API Service annotations. |
 | api.service.type | string | `"ClusterIP"` | API Service type. |
 | apiStartupProbe | object | `{}` | Optional startup probe settings for the API. |
-| config | object | `{"dataDir":"/data","origin":"","rpId":""}` | Non-secret application configuration. |
+| config | object | `{"adminUids":"","allowGuest":"","auditDays":90,"auditIp":"off","auditLog":"","auditMax":5000,"dataDir":"/data","inviteOnly":"","origin":"","rpId":"","rpName":"openGym","sessionDays":90,"vapidSubject":""}` | Non-secret application configuration. |
+| config.adminUids | string | `""` | Comma-separated user IDs granted administrator access. |
+| config.allowGuest | string | `""` | Allow guest mode. Set to "0" to disable it. |
+| config.auditDays | int | `90` | Number of days to retain activity log events. Set to 0 for no limit. |
+| config.auditIp | string | `"off"` | Activity log IP address mode: off, net, or full. |
+| config.auditLog | string | `""` | Enable the activity log. Set to "0" to disable it. |
+| config.auditMax | int | `5000` | Maximum number of activity log events. Set to 0 for no limit. |
 | config.dataDir | string | `"/data"` | Directory used by the API for persistent data. |
+| config.inviteOnly | string | `""` | Require an invite code to create a profile. |
 | config.origin | string | `""` | Application origin. Defaults to the HTTPS ingress origin. |
 | config.rpId | string | `""` | WebAuthn relying-party ID. Defaults to the ingress host. |
+| config.rpName | string | `"openGym"` | Name shown in the passkey prompt. |
+| config.sessionDays | int | `90` | Sign-in lifetime in days. |
+| config.vapidSubject | string | `""` | Contact address for push notifications. Defaults to the application origin. |
 | data | object | `{"accessModes":["ReadWriteOnce"],"annotations":{},"storage":"1Gi","storageClassName":""}` | API persistent data volume configuration. |
 | data.accessModes | list | `["ReadWriteOnce"]` | PersistentVolumeClaim access modes. |
 | data.annotations | object | `{}` | PersistentVolumeClaim annotations. |

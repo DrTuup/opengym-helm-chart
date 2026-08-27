@@ -6,4 +6,4 @@ type: application
 
 version: 0.1.0 # Fallback version, we're using semantic release for creating tagged versions on GitHub
 
-appVersion: "1.2.9"
+appVersion: "1.2.11"

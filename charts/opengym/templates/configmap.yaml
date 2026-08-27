@@ -11,3 +11,13 @@ data:
   DATA_DIR: {{ .Values.config.dataDir | quote }}
   RP_ID: {{ default .Values.ingress.host .Values.config.rpId | quote }}
   ORIGIN: {{ default (printf "https://%s" .Values.ingress.host) .Values.config.origin | quote }}
+  RP_NAME: {{ .Values.config.rpName | quote }}
+  SESSION_DAYS: {{ .Values.config.sessionDays | quote }}
+  ADMIN_UIDS: {{ .Values.config.adminUids | quote }}
+  INVITE_ONLY: {{ .Values.config.inviteOnly | quote }}
+  ALLOW_GUEST: {{ .Values.config.allowGuest | quote }}
+  AUDIT_LOG: {{ .Values.config.auditLog | quote }}
+  AUDIT_MAX: {{ .Values.config.auditMax | quote }}
+  AUDIT_DAYS: {{ .Values.config.auditDays | quote }}
+  AUDIT_IP: {{ .Values.config.auditIp | quote }}
+  VAPID_SUBJECT: {{ default (default (printf "https://%s" .Values.ingress.host) .Values.config.origin) .Values.config.vapidSubject | quote }}
