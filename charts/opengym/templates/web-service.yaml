@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: {{ include "opengym.fullname" . }}-web
   labels:
-    {{- include "opengym.labels" . | nindent 4 }}
+    {{- include "opengym.labels" (dict "root" . "extraLabels" .Values.web.service.labels) | nindent 4 }}
     app.kubernetes.io/component: web
   {{- with .Values.web.service.annotations }}
   annotations:

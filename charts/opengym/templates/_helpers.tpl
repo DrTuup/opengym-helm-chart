@@ -11,10 +11,21 @@
 {{- end }}
 
 {{- define "opengym.labels" -}}
-helm.sh/chart: {{ include "opengym.name" . }}-{{ .Chart.Version | replace "+" "_" }}
-app.kubernetes.io/name: {{ include "opengym.name" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- $root := .root | default . -}}
+{{- $extraLabels := .extraLabels | default dict -}}
+{{- $labels := dict
+  "helm.sh/chart" (printf "%s-%s" (include "opengym.name" $root) ($root.Chart.Version | replace "+" "_"))
+  "app.kubernetes.io/name" (include "opengym.name" $root)
+  "app.kubernetes.io/instance" $root.Release.Name
+  "app.kubernetes.io/managed-by" $root.Release.Service
+-}}
+{{- with (coalesce $root.Values.labels $root.Values.extraLabels $root.Values.additionalLabels) -}}
+{{- $labels = merge $labels . -}}
+{{- end -}}
+{{- with $extraLabels -}}
+{{- $labels = merge $labels . -}}
+{{- end -}}
+{{- toYaml $labels -}}
 {{- end }}
 
 {{- define "opengym.selectorLabels" -}}

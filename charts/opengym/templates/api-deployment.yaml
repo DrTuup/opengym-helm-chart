@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: {{ include "opengym.fullname" . }}-api
   labels:
-    {{- include "opengym.labels" . | nindent 4 }}
+    {{- include "opengym.labels" (dict "root" . "extraLabels" .Values.api.labels) | nindent 4 }}
     app.kubernetes.io/component: api
 spec:
   replicas: {{ .Values.api.replicaCount }}

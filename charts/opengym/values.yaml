@@ -1,5 +1,7 @@
 # -- API workload configuration.
 api:
+  # -- Additional labels for the API Deployment and Service.
+  labels: {}
   # -- Number of API replicas.
   replicaCount: 1
   image:
@@ -14,6 +16,8 @@ api:
   # -- API listening port.
   port: 3000
   service:
+    # -- Additional labels for the API Service.
+    labels: {}
     # -- API Service type.
     type: ClusterIP
     # -- API Service annotations.
@@ -39,6 +43,8 @@ api:
 
 # -- Web workload configuration.
 web:
+  # -- Additional labels for the web Deployment and Service.
+  labels: {}
   # -- Number of web replicas.
   replicaCount: 1
   image:
@@ -53,6 +59,8 @@ web:
   # -- Nginx listening port inside the container.
   containerPort: 80
   service:
+    # -- Additional labels for the web Service.
+    labels: {}
     # -- Web Service type.
     type: ClusterIP
     # -- Web Service port.
@@ -85,6 +93,8 @@ web:
 
 # -- Non-secret application configuration.
 config:
+  # -- Additional labels for the application ConfigMap.
+  labels: {}
   # -- Directory used by the API for persistent data.
   dataDir: /data
   # -- WebAuthn relying-party ID. Defaults to the ingress host.
@@ -114,6 +124,8 @@ config:
 
 # -- API persistent data volume configuration.
 data:
+  # -- Additional labels for the data PVC.
+  labels: {}
   # -- PersistentVolumeClaim annotations.
   annotations: {}
   # -- Requested storage size.
@@ -126,6 +138,8 @@ data:
 
 # -- Shared exercise media volume configuration.
 media:
+  # -- Additional labels for the media PVC.
+  labels: {}
   # -- PersistentVolumeClaim annotations.
   annotations: {}
   # -- Requested storage size.
@@ -147,6 +161,8 @@ media:
 
 # -- Ingress configuration.
 ingress:
+  # -- Additional labels for the Ingress.
+  labels: {}
   # -- Enable the web Ingress.
   enabled: false
   # -- Ingress class name.
@@ -173,6 +189,8 @@ ingress:
 
 # -- Image pull secrets for private registries.
 imagePullSecrets: []
+# -- Additional labels to apply to all resources.
+labels: {}
 # -- Override the chart name.
 nameOverride: ""
 # -- Override the generated full name.

@@ -3,7 +3,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: {{ include "opengym.fullname" . }}-data
   labels:
-    {{- include "opengym.labels" . | nindent 4 }}
+    {{- include "opengym.labels" (dict "root" . "extraLabels" .Values.data.labels) | nindent 4 }}
   {{- with .Values.data.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}

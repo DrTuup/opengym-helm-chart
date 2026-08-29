@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: {{ include "opengym.fullname" . }}-web
   labels:
-    {{- include "opengym.labels" . | nindent 4 }}
+    {{- include "opengym.labels" (dict "root" . "extraLabels" .Values.web.labels) | nindent 4 }}
     app.kubernetes.io/component: web
 spec:
   replicas: {{ .Values.web.replicaCount }}

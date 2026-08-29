@@ -4,7 +4,7 @@ kind: Ingress
 metadata:
   name: {{ include "opengym.fullname" . }}-web
   labels:
-    {{- include "opengym.labels" . | nindent 4 }}
+    {{- include "opengym.labels" (dict "root" . "extraLabels" .Values.ingress.labels) | nindent 4 }}
   {{- with .Values.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}

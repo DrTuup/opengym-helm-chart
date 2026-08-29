@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: {{ include "opengym.fullname" . }}-config
   labels:
-    {{- include "opengym.labels" . | nindent 4 }}
+    {{- include "opengym.labels" (dict "root" . "extraLabels" .Values.config.labels) | nindent 4 }}
 data:
   PORT: {{ .Values.api.port | quote }}
   NGINX_PORT: {{ .Values.web.containerPort | quote }}
