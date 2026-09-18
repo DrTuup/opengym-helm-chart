@@ -10,7 +10,7 @@ api:
     # -- Image pull policy.
     pullPolicy: IfNotPresent
     # -- Immutable image tag. Set either tag or digest.
-    tag: "1.2.11"
+    tag: "1.3.7"
     # -- Image digest, preferred over tag.
     digest: ""
   # -- API listening port.
