@@ -34,6 +34,9 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{- define "opengym.apiImage" -}}
+{{- if and .Values.api.image.tag .Values.api.image.digest -}}
+{{- fail "api.image.tag and api.image.digest cannot both be set" -}}
+{{- end -}}
 {{- if .Values.api.image.digest -}}
 {{ .Values.api.image.repository }}@{{ .Values.api.image.digest }}
 {{- else -}}
@@ -42,6 +45,9 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{- define "opengym.webImage" -}}
+{{- if and .Values.web.image.tag .Values.web.image.digest -}}
+{{- fail "web.image.tag and web.image.digest cannot both be set" -}}
+{{- end -}}
 {{- if .Values.web.image.digest -}}
 {{ .Values.web.image.repository }}@{{ .Values.web.image.digest }}
 {{- else -}}
