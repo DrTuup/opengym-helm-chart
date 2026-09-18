@@ -36,8 +36,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           npx semantic-release
-          VERSION=$(git describe --tags --abbrev=0 --match "v*" 2>/dev/null | sed 's/^v//' || true)
-          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          TAG=$(git tag --points-at HEAD --list 'v*' | head -n 1)
+          if [ -n "$TAG" ]; then
+            echo "version=${TAG#v}" >> "$GITHUB_OUTPUT"
+          else
+            echo "version=" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Lowercase repo name
         id: repo

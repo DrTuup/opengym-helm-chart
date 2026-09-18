@@ -1,0 +1,31 @@
+name: Helm chart
+
+on:
+  pull_request:
+    paths:
+      - "charts/opengym/**"
+      - ".github/workflows/chart.yml"
+  push:
+    branches: [main]
+    paths:
+      - "charts/opengym/**"
+      - ".github/workflows/chart.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v4
+
+      - name: Lint chart
+        run: helm lint charts/opengym
+
+      - name: Render chart
+        run: helm template opengym charts/opengym
