@@ -46,7 +46,7 @@ jobs:
 
       - name: Set up Helm
         if: steps.semrel.outputs.version != ''
-        uses: azure/setup-helm@v4
+        uses: azure/setup-helm@v5
 
       - name: Package chart
         if: steps.semrel.outputs.version != ''
