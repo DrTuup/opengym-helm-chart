@@ -121,6 +121,8 @@ config:
   auditIp: off
   # -- Contact address for push notifications. Defaults to the application origin.
   vapidSubject: ""
+  # -- NGINX DNS Resolver address.
+  resolver: 127.0.0.1
 
 # -- API persistent data volume configuration.
 data:

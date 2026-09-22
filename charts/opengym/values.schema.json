@@ -76,6 +76,14 @@
         }
       }
     },
+    "config": {
+      "type": "object",
+      "properties": {
+        "resolver": {
+          "type": "string"
+        }
+      }
+    },
     "ingress": {
       "type": "object",
       "properties": {
