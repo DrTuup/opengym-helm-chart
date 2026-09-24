@@ -1,175 +1,1042 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "type": "object",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
   "properties": {
+    "affinity": {
+      "additionalProperties": false,
+      "description": "Affinity rules.",
+      "required": [],
+      "title": "affinity",
+      "type": "object"
+    },
     "api": {
-      "type": "object",
+      "additionalProperties": false,
+      "description": "API workload configuration.",
       "properties": {
-        "replicaCount": {
-          "type": "integer",
-          "minimum": 1
+        "image": {
+          "additionalProperties": false,
+          "properties": {
+            "digest": {
+              "default": "",
+              "description": "Image digest, preferred over tag.",
+              "title": "digest",
+              "type": "string"
+            },
+            "pullPolicy": {
+              "default": "IfNotPresent",
+              "description": "Image pull policy.",
+              "title": "pullPolicy",
+              "type": "string"
+            },
+            "repository": {
+              "default": "registry.gitlab.com/duartesantos8/opengym/api",
+              "description": "API container image repository.",
+              "title": "repository",
+              "type": "string"
+            },
+            "tag": {
+              "default": "1.3.8",
+              "description": "Immutable image tag. Set either tag or digest.",
+              "title": "tag",
+              "type": "string"
+            }
+          },
+          "required": [
+            "repository",
+            "pullPolicy",
+            "tag",
+            "digest"
+          ],
+          "title": "image",
+          "type": "object"
+        },
+        "labels": {
+          "additionalProperties": false,
+          "description": "Additional labels for the API Deployment and Service.",
+          "required": [],
+          "title": "labels",
+          "type": "object"
+        },
+        "livenessProbe": {
+          "additionalProperties": false,
+          "description": "API liveness probe.",
+          "properties": {
+            "initialDelaySeconds": {
+              "default": 10,
+              "title": "initialDelaySeconds",
+              "type": "integer"
+            },
+            "periodSeconds": {
+              "default": 15,
+              "title": "periodSeconds",
+              "type": "integer"
+            },
+            "tcpSocket": {
+              "additionalProperties": false,
+              "properties": {
+                "port": {
+                  "default": "http",
+                  "title": "port",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "port"
+              ],
+              "title": "tcpSocket",
+              "type": "object"
+            }
+          },
+          "required": [
+            "tcpSocket",
+            "initialDelaySeconds",
+            "periodSeconds"
+          ],
+          "title": "livenessProbe",
+          "type": "object"
         },
         "port": {
-          "type": "integer",
-          "minimum": 1,
-          "maximum": 65535
+          "default": 3000,
+          "description": "API listening port.",
+          "title": "port",
+          "type": "integer"
         },
-        "image": {
-          "type": "object",
+        "readinessProbe": {
+          "additionalProperties": false,
+          "description": "API readiness probe.",
           "properties": {
-            "repository": {
-              "type": "string",
-              "minLength": 1
+            "initialDelaySeconds": {
+              "default": 3,
+              "title": "initialDelaySeconds",
+              "type": "integer"
             },
-            "tag": {
-              "type": "string"
+            "periodSeconds": {
+              "default": 5,
+              "title": "periodSeconds",
+              "type": "integer"
             },
-            "digest": {
-              "type": "string"
+            "tcpSocket": {
+              "additionalProperties": false,
+              "properties": {
+                "port": {
+                  "default": "http",
+                  "title": "port",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "port"
+              ],
+              "title": "tcpSocket",
+              "type": "object"
             }
           },
           "required": [
-            "repository"
-          ]
-        }
-      }
-    },
-    "web": {
-      "type": "object",
-      "properties": {
-        "replicaCount": {
-          "type": "integer",
-          "minimum": 1
+            "tcpSocket",
+            "initialDelaySeconds",
+            "periodSeconds"
+          ],
+          "title": "readinessProbe",
+          "type": "object"
         },
-        "containerPort": {
-          "type": "integer",
-          "minimum": 1,
-          "maximum": 65535
+        "replicaCount": {
+          "default": 1,
+          "description": "Number of API replicas.",
+          "title": "replicaCount",
+          "type": "integer"
+        },
+        "resources": {
+          "additionalProperties": false,
+          "properties": {
+            "limits": {
+              "additionalProperties": false,
+              "properties": {
+                "memory": {
+                  "default": "512Mi",
+                  "title": "memory",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "memory"
+              ],
+              "title": "limits",
+              "type": "object"
+            },
+            "requests": {
+              "additionalProperties": false,
+              "properties": {
+                "cpu": {
+                  "default": "100m",
+                  "title": "cpu",
+                  "type": "string"
+                },
+                "memory": {
+                  "default": "128Mi",
+                  "title": "memory",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "cpu",
+                "memory"
+              ],
+              "title": "requests",
+              "type": "object"
+            }
+          },
+          "required": [
+            "requests",
+            "limits"
+          ],
+          "title": "resources",
+          "type": "object"
         },
         "service": {
-          "type": "object",
+          "additionalProperties": false,
           "properties": {
-            "port": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 65535
-            }
-          }
-        },
-        "image": {
-          "type": "object",
-          "properties": {
-            "repository": {
-              "type": "string",
-              "minLength": 1
+            "annotations": {
+              "additionalProperties": false,
+              "description": "API Service annotations.",
+              "required": [],
+              "title": "annotations",
+              "type": "object"
             },
-            "tag": {
-              "type": "string"
+            "labels": {
+              "additionalProperties": false,
+              "description": "Additional labels for the API Service.",
+              "required": [],
+              "title": "labels",
+              "type": "object"
             },
-            "digest": {
+            "type": {
+              "default": "ClusterIP",
+              "description": "API Service type.",
+              "title": "type",
               "type": "string"
             }
           },
           "required": [
-            "repository"
-          ]
+            "labels",
+            "type",
+            "annotations"
+          ],
+          "title": "service",
+          "type": "object"
         }
-      }
+      },
+      "required": [
+        "labels",
+        "replicaCount",
+        "image",
+        "port",
+        "service",
+        "resources",
+        "readinessProbe",
+        "livenessProbe"
+      ],
+      "title": "api",
+      "type": "object"
+    },
+    "apiStartupProbe": {
+      "additionalProperties": false,
+      "description": "Optional startup probe settings for the API.",
+      "required": [],
+      "title": "apiStartupProbe",
+      "type": "object"
     },
     "config": {
-      "type": "object",
+      "additionalProperties": false,
+      "description": "Non-secret application configuration.",
       "properties": {
+        "adminUids": {
+          "default": "",
+          "description": "Comma-separated user IDs granted administrator access.",
+          "title": "adminUids",
+          "type": "string"
+        },
+        "allowGuest": {
+          "default": "",
+          "description": "Allow guest mode. Set to \"0\" to disable it.",
+          "title": "allowGuest",
+          "type": "string"
+        },
+        "auditDays": {
+          "default": 90,
+          "description": "Number of days to retain activity log events. Set to 0 for no limit.",
+          "title": "auditDays",
+          "type": "integer"
+        },
+        "auditIp": {
+          "default": "off",
+          "description": "Activity log IP address mode: off, net, or full.",
+          "title": "auditIp",
+          "type": "string"
+        },
+        "auditLog": {
+          "default": "",
+          "description": "Enable the activity log. Set to \"0\" to disable it.",
+          "title": "auditLog",
+          "type": "string"
+        },
+        "auditMax": {
+          "default": 5000,
+          "description": "Maximum number of activity log events. Set to 0 for no limit.",
+          "title": "auditMax",
+          "type": "integer"
+        },
+        "dataDir": {
+          "default": "/data",
+          "description": "Directory used by the API for persistent data.",
+          "title": "dataDir",
+          "type": "string"
+        },
+        "inviteOnly": {
+          "default": "",
+          "description": "Require an invite code to create a profile.",
+          "title": "inviteOnly",
+          "type": "string"
+        },
+        "labels": {
+          "additionalProperties": false,
+          "description": "Additional labels for the application ConfigMap.",
+          "required": [],
+          "title": "labels",
+          "type": "object"
+        },
+        "origin": {
+          "default": "",
+          "description": "Application origin. Defaults to the HTTPS ingress origin.",
+          "title": "origin",
+          "type": "string"
+        },
         "resolver": {
+          "default": "127.0.0.1",
+          "description": "NGINX DNS Resolver address.",
+          "title": "resolver",
+          "type": "string"
+        },
+        "rpId": {
+          "default": "",
+          "description": "WebAuthn relying-party ID. Defaults to the ingress host.",
+          "title": "rpId",
+          "type": "string"
+        },
+        "rpName": {
+          "default": "openGym",
+          "description": "Name shown in the passkey prompt.",
+          "title": "rpName",
+          "type": "string"
+        },
+        "sessionDays": {
+          "default": 90,
+          "description": "Sign-in lifetime in days.",
+          "title": "sessionDays",
+          "type": "integer"
+        },
+        "vapidSubject": {
+          "default": "",
+          "description": "Contact address for push notifications. Defaults to the application origin.",
+          "title": "vapidSubject",
           "type": "string"
         }
-      }
+      },
+      "required": [
+        "labels",
+        "dataDir",
+        "rpId",
+        "origin",
+        "rpName",
+        "sessionDays",
+        "adminUids",
+        "inviteOnly",
+        "allowGuest",
+        "auditLog",
+        "auditMax",
+        "auditDays",
+        "auditIp",
+        "vapidSubject",
+        "resolver"
+      ],
+      "title": "config",
+      "type": "object"
+    },
+    "data": {
+      "additionalProperties": false,
+      "description": "API persistent data volume configuration.",
+      "properties": {
+        "accessModes": {
+          "description": "PersistentVolumeClaim access modes.",
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              }
+            ],
+            "required": []
+          },
+          "title": "accessModes",
+          "type": "array"
+        },
+        "annotations": {
+          "additionalProperties": false,
+          "description": "PersistentVolumeClaim annotations.",
+          "required": [],
+          "title": "annotations",
+          "type": "object"
+        },
+        "labels": {
+          "additionalProperties": false,
+          "description": "Additional labels for the data PVC.",
+          "required": [],
+          "title": "labels",
+          "type": "object"
+        },
+        "storage": {
+          "default": "1Gi",
+          "description": "Requested storage size.",
+          "title": "storage",
+          "type": "string"
+        },
+        "storageClassName": {
+          "default": "",
+          "description": "Storage class, or empty to use the cluster default.",
+          "title": "storageClassName",
+          "type": "string"
+        }
+      },
+      "required": [
+        "labels",
+        "annotations",
+        "storage",
+        "accessModes",
+        "storageClassName"
+      ],
+      "title": "data",
+      "type": "object"
+    },
+    "deploymentStrategy": {
+      "default": "Recreate",
+      "description": "Deployment update strategy. Recreate avoids overlapping pods using\nReadWriteOnce persistent volumes during upgrades.",
+      "title": "deploymentStrategy",
+      "type": "string"
+    },
+    "fullnameOverride": {
+      "default": "",
+      "description": "Override the generated full name.",
+      "title": "fullnameOverride",
+      "type": "string"
+    },
+    "global": {
+      "description": "Global values are values that can be accessed from any chart or subchart by exactly the same name.",
+      "required": [],
+      "title": "global",
+      "type": "object"
+    },
+    "imagePullSecrets": {
+      "description": "Image pull secrets for private registries.",
+      "items": {
+        "required": []
+      },
+      "title": "imagePullSecrets",
+      "type": "array"
     },
     "ingress": {
-      "type": "object",
+      "additionalProperties": false,
+      "description": "Ingress configuration.",
       "properties": {
+        "annotations": {
+          "additionalProperties": false,
+          "description": "Ingress annotations.",
+          "required": [],
+          "title": "annotations",
+          "type": "object"
+        },
+        "className": {
+          "default": "",
+          "description": "Ingress class name.",
+          "title": "className",
+          "type": "string"
+        },
         "enabled": {
+          "default": false,
+          "description": "Enable the web Ingress.",
+          "title": "enabled",
           "type": "boolean"
         },
+        "extraPaths": {
+          "description": "Additional paths for the primary host.",
+          "items": {
+            "required": []
+          },
+          "title": "extraPaths",
+          "type": "array"
+        },
+        "extraRules": {
+          "description": "Additional Ingress rules.",
+          "items": {
+            "required": []
+          },
+          "title": "extraRules",
+          "type": "array"
+        },
+        "extraTls": {
+          "description": "Additional TLS configurations.",
+          "items": {
+            "required": []
+          },
+          "title": "extraTls",
+          "type": "array"
+        },
         "host": {
+          "default": "",
+          "description": "Public hostname.",
+          "title": "host",
+          "type": "string"
+        },
+        "labels": {
+          "additionalProperties": false,
+          "description": "Additional labels for the Ingress.",
+          "required": [],
+          "title": "labels",
+          "type": "object"
+        },
+        "path": {
+          "default": "/",
+          "description": "URL path.",
+          "title": "path",
           "type": "string"
         },
         "pathType": {
-          "type": "string",
-          "enum": [
-            "Exact",
-            "Prefix",
-            "ImplementationSpecific"
-          ]
+          "default": "Prefix",
+          "description": "URL path matching behavior.",
+          "title": "pathType",
+          "type": "string"
         },
         "tls": {
-          "type": "object",
+          "additionalProperties": false,
           "properties": {
             "enabled": {
+              "default": false,
+              "description": "Enable TLS.",
+              "title": "enabled",
               "type": "boolean"
             },
             "secretName": {
+              "default": "",
+              "description": "TLS Secret managed by cert-manager.",
+              "title": "secretName",
               "type": "string"
             }
-          }
+          },
+          "required": [
+            "enabled",
+            "secretName"
+          ],
+          "title": "tls",
+          "type": "object"
         }
       },
-      "allOf": [
-        {
-          "if": {
-            "properties": {
-              "enabled": {
-                "const": true
+      "required": [
+        "labels",
+        "enabled",
+        "className",
+        "annotations",
+        "host",
+        "path",
+        "pathType",
+        "extraPaths",
+        "extraRules",
+        "tls",
+        "extraTls"
+      ],
+      "title": "ingress",
+      "type": "object"
+    },
+    "labels": {
+      "additionalProperties": false,
+      "description": "Additional labels to apply to all resources.",
+      "required": [],
+      "title": "labels",
+      "type": "object"
+    },
+    "media": {
+      "additionalProperties": false,
+      "description": "Shared exercise media volume configuration.",
+      "properties": {
+        "accessModes": {
+          "description": "PersistentVolumeClaim access modes.",
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
               }
-            },
-            "required": [
-              "enabled"
-            ]
+            ],
+            "required": []
           },
-          "then": {
-            "properties": {
-              "host": {
-                "minLength": 1
-              }
-            },
-            "required": [
-              "host"
-            ]
-          }
+          "title": "accessModes",
+          "type": "array"
         },
-        {
-          "if": {
-            "properties": {
-              "tls": {
-                "properties": {
-                  "enabled": {
-                    "const": true
-                  }
-                },
-                "required": [
-                  "enabled"
-                ]
-              }
+        "annotations": {
+          "additionalProperties": false,
+          "description": "PersistentVolumeClaim annotations.",
+          "required": [],
+          "title": "annotations",
+          "type": "object"
+        },
+        "labels": {
+          "additionalProperties": false,
+          "description": "Additional labels for the media PVC.",
+          "required": [],
+          "title": "labels",
+          "type": "object"
+        },
+        "loader": {
+          "additionalProperties": false,
+          "properties": {
+            "enabled": {
+              "default": true,
+              "description": "Download exercise media into the volume before starting the web pod.",
+              "title": "enabled",
+              "type": "boolean"
             },
-            "required": [
-              "tls"
-            ]
-          },
-          "then": {
-            "properties": {
-              "tls": {
-                "properties": {
-                  "secretName": {
-                    "minLength": 1
-                  }
-                },
-                "required": [
-                  "secretName"
-                ]
-              }
+            "image": {
+              "default": "alpine/git",
+              "description": "Media loader image.",
+              "title": "image",
+              "type": "string"
+            },
+            "imagePullPolicy": {
+              "default": "IfNotPresent",
+              "description": "Media loader image pull policy.",
+              "title": "imagePullPolicy",
+              "type": "string"
+            },
+            "repository": {
+              "default": "https://github.com/hasaneyldrm/exercises-dataset",
+              "description": "Exercise media repository.",
+              "title": "repository",
+              "type": "string"
             }
-          }
+          },
+          "required": [
+            "enabled",
+            "image",
+            "imagePullPolicy",
+            "repository"
+          ],
+          "title": "loader",
+          "type": "object"
+        },
+        "storage": {
+          "default": "512Mi",
+          "description": "Requested storage size.",
+          "title": "storage",
+          "type": "string"
+        },
+        "storageClassName": {
+          "default": "",
+          "description": "Storage class, or empty to use the cluster default.",
+          "title": "storageClassName",
+          "type": "string"
         }
-      ]
+      },
+      "required": [
+        "labels",
+        "annotations",
+        "storage",
+        "accessModes",
+        "storageClassName",
+        "loader"
+      ],
+      "title": "media",
+      "type": "object"
+    },
+    "nameOverride": {
+      "default": "",
+      "description": "Override the chart name.",
+      "title": "nameOverride",
+      "type": "string"
+    },
+    "nodeSelector": {
+      "additionalProperties": false,
+      "description": "Node selector.",
+      "required": [],
+      "title": "nodeSelector",
+      "type": "object"
+    },
+    "podAnnotations": {
+      "additionalProperties": false,
+      "description": "Additional pod annotations.",
+      "required": [],
+      "title": "podAnnotations",
+      "type": "object"
+    },
+    "podLabels": {
+      "additionalProperties": false,
+      "description": "Additional pod labels.",
+      "required": [],
+      "title": "podLabels",
+      "type": "object"
+    },
+    "podSecurityContext": {
+      "additionalProperties": false,
+      "description": "Pod security context.",
+      "properties": {
+        "seccompProfile": {
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "default": "RuntimeDefault",
+              "title": "type",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "title": "seccompProfile",
+          "type": "object"
+        }
+      },
+      "required": [
+        "seccompProfile"
+      ],
+      "title": "podSecurityContext",
+      "type": "object"
+    },
+    "securityContext": {
+      "additionalProperties": false,
+      "description": "Container security context.",
+      "properties": {
+        "allowPrivilegeEscalation": {
+          "default": false,
+          "title": "allowPrivilegeEscalation",
+          "type": "boolean"
+        },
+        "capabilities": {
+          "additionalProperties": false,
+          "properties": {
+            "drop": {
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  }
+                ],
+                "required": []
+              },
+              "title": "drop",
+              "type": "array"
+            }
+          },
+          "required": [
+            "drop"
+          ],
+          "title": "capabilities",
+          "type": "object"
+        }
+      },
+      "required": [
+        "allowPrivilegeEscalation",
+        "capabilities"
+      ],
+      "title": "securityContext",
+      "type": "object"
+    },
+    "tolerations": {
+      "description": "Tolerations.",
+      "items": {
+        "required": []
+      },
+      "title": "tolerations",
+      "type": "array"
+    },
+    "web": {
+      "additionalProperties": false,
+      "description": "Web workload configuration.",
+      "properties": {
+        "containerPort": {
+          "default": 80,
+          "description": "Nginx listening port inside the container.",
+          "title": "containerPort",
+          "type": "integer"
+        },
+        "image": {
+          "additionalProperties": false,
+          "properties": {
+            "digest": {
+              "default": "",
+              "description": "Image digest, preferred over tag.",
+              "title": "digest",
+              "type": "string"
+            },
+            "pullPolicy": {
+              "default": "IfNotPresent",
+              "description": "Image pull policy.",
+              "title": "pullPolicy",
+              "type": "string"
+            },
+            "repository": {
+              "default": "registry.gitlab.com/duartesantos8/opengym/web",
+              "description": "Web container image repository.",
+              "title": "repository",
+              "type": "string"
+            },
+            "tag": {
+              "default": "1.3.8",
+              "description": "Immutable image tag. Set either tag or digest.",
+              "title": "tag",
+              "type": "string"
+            }
+          },
+          "required": [
+            "repository",
+            "pullPolicy",
+            "tag",
+            "digest"
+          ],
+          "title": "image",
+          "type": "object"
+        },
+        "labels": {
+          "additionalProperties": false,
+          "description": "Additional labels for the web Deployment and Service.",
+          "required": [],
+          "title": "labels",
+          "type": "object"
+        },
+        "readinessProbe": {
+          "additionalProperties": false,
+          "description": "Web readiness probe.",
+          "properties": {
+            "initialDelaySeconds": {
+              "default": 3,
+              "title": "initialDelaySeconds",
+              "type": "integer"
+            },
+            "periodSeconds": {
+              "default": 5,
+              "title": "periodSeconds",
+              "type": "integer"
+            },
+            "tcpSocket": {
+              "additionalProperties": false,
+              "properties": {
+                "port": {
+                  "default": "http",
+                  "title": "port",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "port"
+              ],
+              "title": "tcpSocket",
+              "type": "object"
+            }
+          },
+          "required": [
+            "tcpSocket",
+            "initialDelaySeconds",
+            "periodSeconds"
+          ],
+          "title": "readinessProbe",
+          "type": "object"
+        },
+        "replicaCount": {
+          "default": 1,
+          "description": "Number of web replicas.",
+          "title": "replicaCount",
+          "type": "integer"
+        },
+        "resources": {
+          "additionalProperties": false,
+          "properties": {
+            "limits": {
+              "additionalProperties": false,
+              "properties": {
+                "memory": {
+                  "default": "256Mi",
+                  "title": "memory",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "memory"
+              ],
+              "title": "limits",
+              "type": "object"
+            },
+            "requests": {
+              "additionalProperties": false,
+              "properties": {
+                "cpu": {
+                  "default": "100m",
+                  "title": "cpu",
+                  "type": "string"
+                },
+                "memory": {
+                  "default": "128Mi",
+                  "title": "memory",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "cpu",
+                "memory"
+              ],
+              "title": "requests",
+              "type": "object"
+            }
+          },
+          "required": [
+            "requests",
+            "limits"
+          ],
+          "title": "resources",
+          "type": "object"
+        },
+        "securityContext": {
+          "additionalProperties": false,
+          "description": "Web container security context. Nginx needs CHOWN during startup to\nprepare its cache directories.",
+          "properties": {
+            "allowPrivilegeEscalation": {
+              "default": false,
+              "title": "allowPrivilegeEscalation",
+              "type": "boolean"
+            },
+            "capabilities": {
+              "additionalProperties": false,
+              "properties": {
+                "add": {
+                  "items": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ],
+                    "required": []
+                  },
+                  "title": "add",
+                  "type": "array"
+                },
+                "drop": {
+                  "items": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      }
+                    ],
+                    "required": []
+                  },
+                  "title": "drop",
+                  "type": "array"
+                }
+              },
+              "required": [
+                "drop",
+                "add"
+              ],
+              "title": "capabilities",
+              "type": "object"
+            }
+          },
+          "required": [
+            "allowPrivilegeEscalation",
+            "capabilities"
+          ],
+          "title": "securityContext",
+          "type": "object"
+        },
+        "service": {
+          "additionalProperties": false,
+          "properties": {
+            "annotations": {
+              "additionalProperties": false,
+              "description": "Web Service annotations.",
+              "required": [],
+              "title": "annotations",
+              "type": "object"
+            },
+            "labels": {
+              "additionalProperties": false,
+              "description": "Additional labels for the web Service.",
+              "required": [],
+              "title": "labels",
+              "type": "object"
+            },
+            "port": {
+              "default": 8080,
+              "description": "Web Service port.",
+              "title": "port",
+              "type": "integer"
+            },
+            "type": {
+              "default": "ClusterIP",
+              "description": "Web Service type.",
+              "title": "type",
+              "type": "string"
+            }
+          },
+          "required": [
+            "labels",
+            "type",
+            "port",
+            "annotations"
+          ],
+          "title": "service",
+          "type": "object"
+        }
+      },
+      "required": [
+        "labels",
+        "replicaCount",
+        "image",
+        "containerPort",
+        "service",
+        "resources",
+        "securityContext",
+        "readinessProbe"
+      ],
+      "title": "web",
+      "type": "object"
+    },
+    "webStartupProbe": {
+      "additionalProperties": false,
+      "description": "Optional startup probe settings for the web container.",
+      "required": [],
+      "title": "webStartupProbe",
+      "type": "object"
     }
-  }
+  },
+  "required": [
+    "api",
+    "web",
+    "config",
+    "data",
+    "media",
+    "ingress",
+    "imagePullSecrets",
+    "labels",
+    "nameOverride",
+    "fullnameOverride",
+    "podAnnotations",
+    "podLabels",
+    "podSecurityContext",
+    "securityContext",
+    "apiStartupProbe",
+    "webStartupProbe",
+    "deploymentStrategy",
+    "nodeSelector",
+    "tolerations",
+    "affinity"
+  ],
+  "type": "object"
 }

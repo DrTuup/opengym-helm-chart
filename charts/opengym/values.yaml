@@ -117,8 +117,8 @@ config:
   auditMax: 5000
   # -- Number of days to retain activity log events. Set to 0 for no limit.
   auditDays: 90
-  # -- Activity log IP address mode: off, net, or full.
-  auditIp: off
+  # -- Activity log IP address mode: off, net, or full. Should be a string.
+  auditIp: "off"
   # -- Contact address for push notifications. Defaults to the application origin.
   vapidSubject: ""
   # -- NGINX DNS Resolver address.

@@ -9,11 +9,11 @@ A Helm Chart for deploying openGym on Kubernetes
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | affinity | object | `{}` | Affinity rules. |
-| api | object | `{"image":{"digest":"","pullPolicy":"IfNotPresent","repository":"registry.gitlab.com/duartesantos8/opengym/api","tag":"1.2.11"},"labels":{},"livenessProbe":{"initialDelaySeconds":10,"periodSeconds":15,"tcpSocket":{"port":"http"}},"port":3000,"readinessProbe":{"initialDelaySeconds":3,"periodSeconds":5,"tcpSocket":{"port":"http"}},"replicaCount":1,"resources":{"limits":{"memory":"512Mi"},"requests":{"cpu":"100m","memory":"128Mi"}},"service":{"annotations":{},"labels":{},"type":"ClusterIP"}}` | API workload configuration. |
+| api | object | `{"image":{"digest":"","pullPolicy":"IfNotPresent","repository":"registry.gitlab.com/duartesantos8/opengym/api","tag":"1.3.8"},"labels":{},"livenessProbe":{"initialDelaySeconds":10,"periodSeconds":15,"tcpSocket":{"port":"http"}},"port":3000,"readinessProbe":{"initialDelaySeconds":3,"periodSeconds":5,"tcpSocket":{"port":"http"}},"replicaCount":1,"resources":{"limits":{"memory":"512Mi"},"requests":{"cpu":"100m","memory":"128Mi"}},"service":{"annotations":{},"labels":{},"type":"ClusterIP"}}` | API workload configuration. |
 | api.image.digest | string | `""` | Image digest, preferred over tag. |
 | api.image.pullPolicy | string | `"IfNotPresent"` | Image pull policy. |
 | api.image.repository | string | `"registry.gitlab.com/duartesantos8/opengym/api"` | API container image repository. |
-| api.image.tag | string | `"1.2.11"` | Immutable image tag. Set either tag or digest. |
+| api.image.tag | string | `"1.3.8"` | Immutable image tag. Set either tag or digest. |
 | api.labels | object | `{}` | Additional labels for the API Deployment and Service. |
 | api.livenessProbe | object | `{"initialDelaySeconds":10,"periodSeconds":15,"tcpSocket":{"port":"http"}}` | API liveness probe. |
 | api.port | int | `3000` | API listening port. |
@@ -23,17 +23,18 @@ A Helm Chart for deploying openGym on Kubernetes
 | api.service.labels | object | `{}` | Additional labels for the API Service. |
 | api.service.type | string | `"ClusterIP"` | API Service type. |
 | apiStartupProbe | object | `{}` | Optional startup probe settings for the API. |
-| config | object | `{"adminUids":"","allowGuest":"","auditDays":90,"auditIp":"off","auditLog":"","auditMax":5000,"dataDir":"/data","inviteOnly":"","labels":{},"origin":"","rpId":"","rpName":"openGym","sessionDays":90,"vapidSubject":""}` | Non-secret application configuration. |
+| config | object | `{"adminUids":"","allowGuest":"","auditDays":90,"auditIp":"off","auditLog":"","auditMax":5000,"dataDir":"/data","inviteOnly":"","labels":{},"origin":"","resolver":"127.0.0.1","rpId":"","rpName":"openGym","sessionDays":90,"vapidSubject":""}` | Non-secret application configuration. |
 | config.adminUids | string | `""` | Comma-separated user IDs granted administrator access. |
 | config.allowGuest | string | `""` | Allow guest mode. Set to "0" to disable it. |
 | config.auditDays | int | `90` | Number of days to retain activity log events. Set to 0 for no limit. |
-| config.auditIp | string | `"off"` | Activity log IP address mode: off, net, or full. |
+| config.auditIp | string | `"off"` | Activity log IP address mode: off, net, or full. Should be a string. |
 | config.auditLog | string | `""` | Enable the activity log. Set to "0" to disable it. |
 | config.auditMax | int | `5000` | Maximum number of activity log events. Set to 0 for no limit. |
 | config.dataDir | string | `"/data"` | Directory used by the API for persistent data. |
 | config.inviteOnly | string | `""` | Require an invite code to create a profile. |
 | config.labels | object | `{}` | Additional labels for the application ConfigMap. |
 | config.origin | string | `""` | Application origin. Defaults to the HTTPS ingress origin. |
+| config.resolver | string | `"127.0.0.1"` | NGINX DNS Resolver address. |
 | config.rpId | string | `""` | WebAuthn relying-party ID. Defaults to the ingress host. |
 | config.rpName | string | `"openGym"` | Name shown in the passkey prompt. |
 | config.sessionDays | int | `90` | Sign-in lifetime in days. |
@@ -78,12 +79,12 @@ A Helm Chart for deploying openGym on Kubernetes
 | podSecurityContext | object | `{"seccompProfile":{"type":"RuntimeDefault"}}` | Pod security context. |
 | securityContext | object | `{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]}}` | Container security context. |
 | tolerations | list | `[]` | Tolerations. |
-| web | object | `{"containerPort":80,"image":{"digest":"","pullPolicy":"IfNotPresent","repository":"registry.gitlab.com/duartesantos8/opengym/web","tag":"1.2.11"},"labels":{},"readinessProbe":{"initialDelaySeconds":3,"periodSeconds":5,"tcpSocket":{"port":"http"}},"replicaCount":1,"resources":{"limits":{"memory":"256Mi"},"requests":{"cpu":"100m","memory":"128Mi"}},"securityContext":{"allowPrivilegeEscalation":false,"capabilities":{"add":["CHOWN","SETGID","SETUID"],"drop":["ALL"]}},"service":{"annotations":{},"labels":{},"port":8080,"type":"ClusterIP"}}` | Web workload configuration. |
+| web | object | `{"containerPort":80,"image":{"digest":"","pullPolicy":"IfNotPresent","repository":"registry.gitlab.com/duartesantos8/opengym/web","tag":"1.3.8"},"labels":{},"readinessProbe":{"initialDelaySeconds":3,"periodSeconds":5,"tcpSocket":{"port":"http"}},"replicaCount":1,"resources":{"limits":{"memory":"256Mi"},"requests":{"cpu":"100m","memory":"128Mi"}},"securityContext":{"allowPrivilegeEscalation":false,"capabilities":{"add":["CHOWN","SETGID","SETUID"],"drop":["ALL"]}},"service":{"annotations":{},"labels":{},"port":8080,"type":"ClusterIP"}}` | Web workload configuration. |
 | web.containerPort | int | `80` | Nginx listening port inside the container. |
 | web.image.digest | string | `""` | Image digest, preferred over tag. |
 | web.image.pullPolicy | string | `"IfNotPresent"` | Image pull policy. |
 | web.image.repository | string | `"registry.gitlab.com/duartesantos8/opengym/web"` | Web container image repository. |
-| web.image.tag | string | `"1.2.11"` | Immutable image tag. Set either tag or digest. |
+| web.image.tag | string | `"1.3.8"` | Immutable image tag. Set either tag or digest. |
 | web.labels | object | `{}` | Additional labels for the web Deployment and Service. |
 | web.readinessProbe | object | `{"initialDelaySeconds":3,"periodSeconds":5,"tcpSocket":{"port":"http"}}` | Web readiness probe. |
 | web.replicaCount | int | `1` | Number of web replicas. |
