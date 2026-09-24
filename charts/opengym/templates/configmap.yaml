@@ -7,7 +7,7 @@ metadata:
 data:
   PORT: {{ .Values.api.port | quote }}
   NGINX_PORT: {{ .Values.web.containerPort | quote }}
-  RESOLVER: {{ .Values.web.resolver | quote }}
+  RESOLVER: {{ .Values.config.resolver | quote }}
   BACKEND: {{ printf "%s-api" (include "opengym.fullname" .) | quote }}
   DATA_DIR: {{ .Values.config.dataDir | quote }}
   RP_ID: {{ default .Values.ingress.host .Values.config.rpId | quote }}
