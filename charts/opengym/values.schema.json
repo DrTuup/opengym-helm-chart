@@ -3,7 +3,7 @@
   "additionalProperties": false,
   "properties": {
     "affinity": {
-      "additionalProperties": false,
+      "additionalProperties": true,
       "description": "Affinity rules.",
       "required": [],
       "title": "affinity",
@@ -51,14 +51,16 @@
           "type": "object"
         },
         "labels": {
-          "additionalProperties": false,
+          "additionalProperties": {
+            "type": "string"
+          },
           "description": "Additional labels for the API Deployment and Service.",
           "required": [],
           "title": "labels",
           "type": "object"
         },
         "livenessProbe": {
-          "additionalProperties": false,
+          "additionalProperties": true,
           "description": "API liveness probe.",
           "properties": {
             "initialDelaySeconds": {
@@ -72,12 +74,19 @@
               "type": "integer"
             },
             "tcpSocket": {
-              "additionalProperties": false,
+              "additionalProperties": true,
               "properties": {
                 "port": {
                   "default": "http",
                   "title": "port",
-                  "type": "string"
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "integer"
+                    }
+                  ]
                 }
               },
               "required": [
@@ -88,7 +97,6 @@
             }
           },
           "required": [
-            "tcpSocket",
             "initialDelaySeconds",
             "periodSeconds"
           ],
@@ -102,7 +110,7 @@
           "type": "integer"
         },
         "readinessProbe": {
-          "additionalProperties": false,
+          "additionalProperties": true,
           "description": "API readiness probe.",
           "properties": {
             "initialDelaySeconds": {
@@ -116,12 +124,19 @@
               "type": "integer"
             },
             "tcpSocket": {
-              "additionalProperties": false,
+              "additionalProperties": true,
               "properties": {
                 "port": {
                   "default": "http",
                   "title": "port",
-                  "type": "string"
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "integer"
+                    }
+                  ]
                 }
               },
               "required": [
@@ -132,7 +147,6 @@
             }
           },
           "required": [
-            "tcpSocket",
             "initialDelaySeconds",
             "periodSeconds"
           ],
@@ -196,14 +210,18 @@
           "additionalProperties": false,
           "properties": {
             "annotations": {
-              "additionalProperties": false,
+              "additionalProperties": {
+                "type": "string"
+              },
               "description": "API Service annotations.",
               "required": [],
               "title": "annotations",
               "type": "object"
             },
             "labels": {
-              "additionalProperties": false,
+              "additionalProperties": {
+                "type": "string"
+              },
               "description": "Additional labels for the API Service.",
               "required": [],
               "title": "labels",
@@ -239,7 +257,7 @@
       "type": "object"
     },
     "apiStartupProbe": {
-      "additionalProperties": false,
+      "additionalProperties": true,
       "description": "Optional startup probe settings for the API.",
       "required": [],
       "title": "apiStartupProbe",
@@ -298,7 +316,9 @@
           "type": "string"
         },
         "labels": {
-          "additionalProperties": false,
+          "additionalProperties": {
+            "type": "string"
+          },
           "description": "Additional labels for the application ConfigMap.",
           "required": [],
           "title": "labels",
@@ -379,14 +399,18 @@
           "type": "array"
         },
         "annotations": {
-          "additionalProperties": false,
+          "additionalProperties": {
+            "type": "string"
+          },
           "description": "PersistentVolumeClaim annotations.",
           "required": [],
           "title": "annotations",
           "type": "object"
         },
         "labels": {
-          "additionalProperties": false,
+          "additionalProperties": {
+            "type": "string"
+          },
           "description": "Additional labels for the data PVC.",
           "required": [],
           "title": "labels",
@@ -446,7 +470,9 @@
       "description": "Ingress configuration.",
       "properties": {
         "annotations": {
-          "additionalProperties": false,
+          "additionalProperties": {
+            "type": "string"
+          },
           "description": "Ingress annotations.",
           "required": [],
           "title": "annotations",
@@ -495,7 +521,9 @@
           "type": "string"
         },
         "labels": {
-          "additionalProperties": false,
+          "additionalProperties": {
+            "type": "string"
+          },
           "description": "Additional labels for the Ingress.",
           "required": [],
           "title": "labels",
@@ -554,7 +582,9 @@
       "type": "object"
     },
     "labels": {
-      "additionalProperties": false,
+      "additionalProperties": {
+        "type": "string"
+      },
       "description": "Additional labels to apply to all resources.",
       "required": [],
       "title": "labels",
@@ -578,14 +608,18 @@
           "type": "array"
         },
         "annotations": {
-          "additionalProperties": false,
+          "additionalProperties": {
+            "type": "string"
+          },
           "description": "PersistentVolumeClaim annotations.",
           "required": [],
           "title": "annotations",
           "type": "object"
         },
         "labels": {
-          "additionalProperties": false,
+          "additionalProperties": {
+            "type": "string"
+          },
           "description": "Additional labels for the media PVC.",
           "required": [],
           "title": "labels",
@@ -659,32 +693,38 @@
       "type": "string"
     },
     "nodeSelector": {
-      "additionalProperties": false,
+      "additionalProperties": {
+        "type": "string"
+      },
       "description": "Node selector.",
       "required": [],
       "title": "nodeSelector",
       "type": "object"
     },
     "podAnnotations": {
-      "additionalProperties": false,
+      "additionalProperties": {
+        "type": "string"
+      },
       "description": "Additional pod annotations.",
       "required": [],
       "title": "podAnnotations",
       "type": "object"
     },
     "podLabels": {
-      "additionalProperties": false,
+      "additionalProperties": {
+        "type": "string"
+      },
       "description": "Additional pod labels.",
       "required": [],
       "title": "podLabels",
       "type": "object"
     },
     "podSecurityContext": {
-      "additionalProperties": false,
+      "additionalProperties": true,
       "description": "Pod security context.",
       "properties": {
         "seccompProfile": {
-          "additionalProperties": false,
+          "additionalProperties": true,
           "properties": {
             "type": {
               "default": "RuntimeDefault",
@@ -706,7 +746,7 @@
       "type": "object"
     },
     "securityContext": {
-      "additionalProperties": false,
+      "additionalProperties": true,
       "description": "Container security context.",
       "properties": {
         "allowPrivilegeEscalation": {
@@ -715,7 +755,7 @@
           "type": "boolean"
         },
         "capabilities": {
-          "additionalProperties": false,
+          "additionalProperties": true,
           "properties": {
             "drop": {
               "items": {
@@ -800,14 +840,16 @@
           "type": "object"
         },
         "labels": {
-          "additionalProperties": false,
+          "additionalProperties": {
+            "type": "string"
+          },
           "description": "Additional labels for the web Deployment and Service.",
           "required": [],
           "title": "labels",
           "type": "object"
         },
         "readinessProbe": {
-          "additionalProperties": false,
+          "additionalProperties": true,
           "description": "Web readiness probe.",
           "properties": {
             "initialDelaySeconds": {
@@ -821,12 +863,19 @@
               "type": "integer"
             },
             "tcpSocket": {
-              "additionalProperties": false,
+              "additionalProperties": true,
               "properties": {
                 "port": {
                   "default": "http",
                   "title": "port",
-                  "type": "string"
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "integer"
+                    }
+                  ]
                 }
               },
               "required": [
@@ -837,7 +886,6 @@
             }
           },
           "required": [
-            "tcpSocket",
             "initialDelaySeconds",
             "periodSeconds"
           ],
@@ -898,7 +946,7 @@
           "type": "object"
         },
         "securityContext": {
-          "additionalProperties": false,
+          "additionalProperties": true,
           "description": "Web container security context. Nginx needs CHOWN during startup to\nprepare its cache directories.",
           "properties": {
             "allowPrivilegeEscalation": {
@@ -907,7 +955,7 @@
               "type": "boolean"
             },
             "capabilities": {
-              "additionalProperties": false,
+              "additionalProperties": true,
               "properties": {
                 "add": {
                   "items": {
@@ -959,14 +1007,18 @@
           "additionalProperties": false,
           "properties": {
             "annotations": {
-              "additionalProperties": false,
+              "additionalProperties": {
+                "type": "string"
+              },
               "description": "Web Service annotations.",
               "required": [],
               "title": "annotations",
               "type": "object"
             },
             "labels": {
-              "additionalProperties": false,
+              "additionalProperties": {
+                "type": "string"
+              },
               "description": "Additional labels for the web Service.",
               "required": [],
               "title": "labels",
@@ -1009,7 +1061,7 @@
       "type": "object"
     },
     "webStartupProbe": {
-      "additionalProperties": false,
+      "additionalProperties": true,
       "description": "Optional startup probe settings for the web container.",
       "required": [],
       "title": "webStartupProbe",

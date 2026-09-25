@@ -8,21 +8,21 @@ A Helm Chart for deploying openGym on Kubernetes
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| affinity | object | `{}` | Affinity rules. |
+| affinity | object | `{}` | Affinity rules. Supports Kubernetes pod affinity fields. |
 | api | object | `{"image":{"digest":"","pullPolicy":"IfNotPresent","repository":"registry.gitlab.com/duartesantos8/opengym/api","tag":"1.3.8"},"labels":{},"livenessProbe":{"initialDelaySeconds":10,"periodSeconds":15,"tcpSocket":{"port":"http"}},"port":3000,"readinessProbe":{"initialDelaySeconds":3,"periodSeconds":5,"tcpSocket":{"port":"http"}},"replicaCount":1,"resources":{"limits":{"memory":"512Mi"},"requests":{"cpu":"100m","memory":"128Mi"}},"service":{"annotations":{},"labels":{},"type":"ClusterIP"}}` | API workload configuration. |
 | api.image.digest | string | `""` | Image digest, preferred over tag. |
 | api.image.pullPolicy | string | `"IfNotPresent"` | Image pull policy. |
 | api.image.repository | string | `"registry.gitlab.com/duartesantos8/opengym/api"` | API container image repository. |
 | api.image.tag | string | `"1.3.8"` | Immutable image tag. Set either tag or digest. |
 | api.labels | object | `{}` | Additional labels for the API Deployment and Service. |
-| api.livenessProbe | object | `{"initialDelaySeconds":10,"periodSeconds":15,"tcpSocket":{"port":"http"}}` | API liveness probe. |
+| api.livenessProbe | object | `{"initialDelaySeconds":10,"periodSeconds":15,"tcpSocket":{"port":"http"}}` | API liveness probe. Supports Kubernetes probe fields and handlers. |
 | api.port | int | `3000` | API listening port. |
-| api.readinessProbe | object | `{"initialDelaySeconds":3,"periodSeconds":5,"tcpSocket":{"port":"http"}}` | API readiness probe. |
+| api.readinessProbe | object | `{"initialDelaySeconds":3,"periodSeconds":5,"tcpSocket":{"port":"http"}}` | API readiness probe. Supports Kubernetes probe fields and handlers. |
 | api.replicaCount | int | `1` | Number of API replicas. |
 | api.service.annotations | object | `{}` | API Service annotations. |
 | api.service.labels | object | `{}` | Additional labels for the API Service. |
 | api.service.type | string | `"ClusterIP"` | API Service type. |
-| apiStartupProbe | object | `{}` | Optional startup probe settings for the API. |
+| apiStartupProbe | object | `{}` | Optional API startup probe. Supports Kubernetes probe fields and handlers. |
 | config | object | `{"adminUids":"","allowGuest":"","auditDays":90,"auditIp":"off","auditLog":"","auditMax":5000,"dataDir":"/data","inviteOnly":"","labels":{},"origin":"","resolver":"127.0.0.1","rpId":"","rpName":"openGym","sessionDays":90,"vapidSubject":""}` | Non-secret application configuration. |
 | config.adminUids | string | `""` | Comma-separated user IDs granted administrator access. |
 | config.allowGuest | string | `""` | Allow guest mode. Set to "0" to disable it. |
@@ -73,11 +73,11 @@ A Helm Chart for deploying openGym on Kubernetes
 | media.storage | string | `"512Mi"` | Requested storage size. |
 | media.storageClassName | string | `""` | Storage class, or empty to use the cluster default. |
 | nameOverride | string | `""` | Override the chart name. |
-| nodeSelector | object | `{}` | Node selector. |
+| nodeSelector | object | `{}` | Node selector key-value map. |
 | podAnnotations | object | `{}` | Additional pod annotations. |
 | podLabels | object | `{}` | Additional pod labels. |
-| podSecurityContext | object | `{"seccompProfile":{"type":"RuntimeDefault"}}` | Pod security context. |
-| securityContext | object | `{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]}}` | Container security context. |
+| podSecurityContext | object | `{"seccompProfile":{"type":"RuntimeDefault"}}` | Pod security context. Supports Kubernetes pod security context fields. |
+| securityContext | object | `{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]}}` | Container security context. Supports Kubernetes container security context fields. |
 | tolerations | list | `[]` | Tolerations. |
 | web | object | `{"containerPort":80,"image":{"digest":"","pullPolicy":"IfNotPresent","repository":"registry.gitlab.com/duartesantos8/opengym/web","tag":"1.3.8"},"labels":{},"readinessProbe":{"initialDelaySeconds":3,"periodSeconds":5,"tcpSocket":{"port":"http"}},"replicaCount":1,"resources":{"limits":{"memory":"256Mi"},"requests":{"cpu":"100m","memory":"128Mi"}},"securityContext":{"allowPrivilegeEscalation":false,"capabilities":{"add":["CHOWN","SETGID","SETUID"],"drop":["ALL"]}},"service":{"annotations":{},"labels":{},"port":8080,"type":"ClusterIP"}}` | Web workload configuration. |
 | web.containerPort | int | `80` | Nginx listening port inside the container. |
@@ -86,14 +86,14 @@ A Helm Chart for deploying openGym on Kubernetes
 | web.image.repository | string | `"registry.gitlab.com/duartesantos8/opengym/web"` | Web container image repository. |
 | web.image.tag | string | `"1.3.8"` | Immutable image tag. Set either tag or digest. |
 | web.labels | object | `{}` | Additional labels for the web Deployment and Service. |
-| web.readinessProbe | object | `{"initialDelaySeconds":3,"periodSeconds":5,"tcpSocket":{"port":"http"}}` | Web readiness probe. |
+| web.readinessProbe | object | `{"initialDelaySeconds":3,"periodSeconds":5,"tcpSocket":{"port":"http"}}` | Web readiness probe. Supports Kubernetes probe fields and handlers. |
 | web.replicaCount | int | `1` | Number of web replicas. |
-| web.securityContext | object | `{"allowPrivilegeEscalation":false,"capabilities":{"add":["CHOWN","SETGID","SETUID"],"drop":["ALL"]}}` | prepare its cache directories. |
+| web.securityContext | object | `{"allowPrivilegeEscalation":false,"capabilities":{"add":["CHOWN","SETGID","SETUID"],"drop":["ALL"]}}` | directories. |
 | web.service.annotations | object | `{}` | Web Service annotations. |
 | web.service.labels | object | `{}` | Additional labels for the web Service. |
 | web.service.port | int | `8080` | Web Service port. |
 | web.service.type | string | `"ClusterIP"` | Web Service type. |
-| webStartupProbe | object | `{}` | Optional startup probe settings for the web container. |
+| webStartupProbe | object | `{}` | Optional web startup probe. Supports Kubernetes probe fields and handlers. |
 
 ----------------------------------------------
 Autogenerated from chart metadata using [helm-docs v1.14.2](https://github.com/norwoodj/helm-docs/releases/v1.14.2)

@@ -28,13 +28,13 @@ api:
       memory: 128Mi
     limits:
       memory: 512Mi
-  # -- API readiness probe.
+  # -- API readiness probe. Supports Kubernetes probe fields and handlers.
   readinessProbe:
     tcpSocket:
       port: http
     initialDelaySeconds: 3
     periodSeconds: 5
-  # -- API liveness probe.
+  # -- API liveness probe. Supports Kubernetes probe fields and handlers.
   livenessProbe:
     tcpSocket:
       port: http
@@ -73,8 +73,9 @@ web:
       memory: 128Mi
     limits:
       memory: 256Mi
-  # -- Web container security context. Nginx needs CHOWN during startup to
-  # -- prepare its cache directories.
+  # -- Web container security context. Supports Kubernetes container security
+  # -- context fields. Nginx needs CHOWN during startup to prepare its cache
+  # -- directories.
   securityContext:
     allowPrivilegeEscalation: false
     capabilities:
@@ -84,7 +85,7 @@ web:
         - CHOWN
         - SETGID
         - SETUID
-  # -- Web readiness probe.
+  # -- Web readiness probe. Supports Kubernetes probe fields and handlers.
   readinessProbe:
     tcpSocket:
       port: http
@@ -201,26 +202,26 @@ fullnameOverride: ""
 podAnnotations: {}
 # -- Additional pod labels.
 podLabels: {}
-# -- Pod security context.
+# -- Pod security context. Supports Kubernetes pod security context fields.
 podSecurityContext:
   seccompProfile:
     type: RuntimeDefault
-# -- Container security context.
+# -- Container security context. Supports Kubernetes container security context fields.
 securityContext:
   allowPrivilegeEscalation: false
   capabilities:
     drop:
       - ALL
-# -- Optional startup probe settings for the API.
+# -- Optional API startup probe. Supports Kubernetes probe fields and handlers.
 apiStartupProbe: {}
-# -- Optional startup probe settings for the web container.
+# -- Optional web startup probe. Supports Kubernetes probe fields and handlers.
 webStartupProbe: {}
 # -- Deployment update strategy. Recreate avoids overlapping pods using
 # -- ReadWriteOnce persistent volumes during upgrades.
 deploymentStrategy: Recreate
-# -- Node selector.
+# -- Node selector key-value map.
 nodeSelector: {}
 # -- Tolerations.
 tolerations: []
-# -- Affinity rules.
+# -- Affinity rules. Supports Kubernetes pod affinity fields.
 affinity: {}
