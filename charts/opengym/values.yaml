@@ -96,6 +96,8 @@ web:
 config:
   # -- Additional labels for the application ConfigMap.
   labels: {}
+  # -- API backend DNS name. Defaults to the chart's API Service in Kubernetes DNS.
+  backend: ""
   # -- Directory used by the API for persistent data.
   dataDir: /data
   # -- WebAuthn relying-party ID. Defaults to the ingress host.
@@ -123,7 +125,7 @@ config:
   # -- Contact address for push notifications. Defaults to the application origin.
   vapidSubject: ""
   # -- NGINX DNS Resolver address.
-  resolver: 127.0.0.1
+  resolver: 10.96.0.10
 
 # -- API persistent data volume configuration.
 data:

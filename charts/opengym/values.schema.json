@@ -273,6 +273,12 @@
           "title": "adminUids",
           "type": "string"
         },
+        "backend": {
+          "default": "",
+          "description": "API backend DNS name. Defaults to the chart's API Service in Kubernetes DNS.",
+          "title": "backend",
+          "type": "string"
+        },
         "allowGuest": {
           "default": "",
           "description": "Allow guest mode. Set to \"0\" to disable it.",
@@ -331,7 +337,7 @@
           "type": "string"
         },
         "resolver": {
-          "default": "127.0.0.1",
+          "default": "10.96.0.10",
           "description": "NGINX DNS Resolver address.",
           "title": "resolver",
           "type": "string"
@@ -363,6 +369,7 @@
       },
       "required": [
         "labels",
+        "backend",
         "dataDir",
         "rpId",
         "origin",

@@ -8,7 +8,7 @@ data:
   PORT: {{ .Values.api.port | quote }}
   NGINX_PORT: {{ .Values.web.containerPort | quote }}
   RESOLVER: {{ .Values.config.resolver | quote }}
-  BACKEND: {{ printf "%s-api" (include "opengym.fullname" .) | quote }}
+  BACKEND: {{ default (printf "%s-api.%s.svc.cluster.local" (include "opengym.fullname" .) .Release.Namespace) .Values.config.backend | quote }}
   DATA_DIR: {{ .Values.config.dataDir | quote }}
   RP_ID: {{ default .Values.ingress.host .Values.config.rpId | quote }}
   ORIGIN: {{ default (printf "https://%s" .Values.ingress.host) .Values.config.origin | quote }}

@@ -23,18 +23,19 @@ A Helm Chart for deploying openGym on Kubernetes
 | api.service.labels | object | `{}` | Additional labels for the API Service. |
 | api.service.type | string | `"ClusterIP"` | API Service type. |
 | apiStartupProbe | object | `{}` | Optional API startup probe. Supports Kubernetes probe fields and handlers. |
-| config | object | `{"adminUids":"","allowGuest":"","auditDays":90,"auditIp":"off","auditLog":"","auditMax":5000,"dataDir":"/data","inviteOnly":"","labels":{},"origin":"","resolver":"127.0.0.1","rpId":"","rpName":"openGym","sessionDays":90,"vapidSubject":""}` | Non-secret application configuration. |
+| config | object | `{"adminUids":"","allowGuest":"","auditDays":90,"auditIp":"off","auditLog":"","auditMax":5000,"backend":"","dataDir":"/data","inviteOnly":"","labels":{},"origin":"","resolver":"10.96.0.10","rpId":"","rpName":"openGym","sessionDays":90,"vapidSubject":""}` | Non-secret application configuration. |
 | config.adminUids | string | `""` | Comma-separated user IDs granted administrator access. |
 | config.allowGuest | string | `""` | Allow guest mode. Set to "0" to disable it. |
 | config.auditDays | int | `90` | Number of days to retain activity log events. Set to 0 for no limit. |
 | config.auditIp | string | `"off"` | Activity log IP address mode: off, net, or full. Should be a string. |
 | config.auditLog | string | `""` | Enable the activity log. Set to "0" to disable it. |
 | config.auditMax | int | `5000` | Maximum number of activity log events. Set to 0 for no limit. |
+| config.backend | string | `""` | API backend DNS name. Defaults to the chart's API Service in Kubernetes DNS. |
 | config.dataDir | string | `"/data"` | Directory used by the API for persistent data. |
 | config.inviteOnly | string | `""` | Require an invite code to create a profile. |
 | config.labels | object | `{}` | Additional labels for the application ConfigMap. |
 | config.origin | string | `""` | Application origin. Defaults to the HTTPS ingress origin. |
-| config.resolver | string | `"127.0.0.1"` | NGINX DNS Resolver address. |
+| config.resolver | string | `"10.96.0.10"` | NGINX DNS Resolver address. |
 | config.rpId | string | `""` | WebAuthn relying-party ID. Defaults to the ingress host. |
 | config.rpName | string | `"openGym"` | Name shown in the passkey prompt. |
 | config.sessionDays | int | `90` | Sign-in lifetime in days. |
